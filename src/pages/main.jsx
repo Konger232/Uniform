@@ -312,7 +312,7 @@ function MyApp() {
 
     return (
         <>
-            <BrowserRouter>
+            <BrowserRouter basename="/Uniform">
                 <div className="navBar">
                     <nav className="nav">
                         <NavLink className={({isActive}) => isActive ? "navItemActive" : "navItem"} to="/">Profile</NavLink> 

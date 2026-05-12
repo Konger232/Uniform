@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 // repo has to be exact 
 export default defineConfig({
   plugins: [react()],
-  base: "/Uniform"
+  base: "/Uniform/"
 })
