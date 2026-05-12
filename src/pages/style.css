@@ -1,0 +1,361 @@
+/* CSS color-label */
+:root {
+    --green:#3B6D11;
+    --green-light:#EAF3DE;
+    --green-mid: #639922;
+    --orange: rgb(224, 171, 27);
+    --bg-page:#f5f3ee;
+    --bg-card:#fefefe;
+    --bg-surface: #faf9f7;
+    --border: #e8e4dc;
+    --border-mid: #d0ccc4;
+    --text: #222222;
+    --text-muted: #666666;
+    --text-subtle: #aaaaaa;
+    --warning-bg: @fff8ee;
+    --warning-border: #f0d090;
+    --warning-text: #b35c00;
+    --error: #c0392b;
+
+}
+
+body {
+    background-color:var(--bg-page);
+}
+
+.container {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  margin:0;
+}
+
+.navBar {
+  display: flex;
+  top: 0;
+  z-index:10;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 24px;
+  background:var(--bg-card);
+  border-bottom: 1px solid var(--var);
+  position:sticky;
+}
+
+.nav {
+  display: flex;
+  top: 0;
+  padding: 0 50px; 
+  background:var(--bg-card);
+  border-bottom: 1px solid var(--var);
+}
+
+.navItem {
+  text-decoration-line: none;
+  color:var(--text-muted);
+  border-bottom: 2px solid transparent;
+  padding: 16px 18px;
+  font-size:16px;
+}
+
+.navItem:hover {
+  color: var(--green);
+}
+
+.navItemActive {
+  text-decoration-line: none;
+  color:var(--green);
+  border-bottom: 2px solid var(--green);
+  padding: 16px 18px;
+  font-size:16px;
+}
+
+.cartBadge {
+    display: inline-flex;
+    align-items:center;
+    justify-content: center;
+    background:var(--green);
+    font-size:10px;
+    font-weight:500;
+    width:20px;
+    border-radius:20px;
+    padding: 0px;
+    margin-left:5px;
+    vertical-align:middle;
+    color:var(--bg-page);
+}
+
+.profileSummary {
+    color:var(--text-subtle);
+    padding: 16px 18px;
+    font-size:16px;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: var(--orange);
+}
+
+h1 {font-size: 34px;}
+
+p {
+  color:var(--text);
+}
+
+.stepHeader {
+    display: inline-block;
+    /* background: rgba(255, 255, 255, 0.18); */
+    color: var(--green-mid);
+    font-size: 12px;
+    font-family: 'Trebuchet MS', sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+/* form elements */
+input {
+  width:80px;
+  height:20px;
+  padding:20px;
+  margin:10px;
+  border-radius: 12px;
+  border:1px solid var(--border);
+  font-size: xx-large;
+  font-family: Arial, Helvetica, sans-serif; 
+}
+
+button {
+  width:fit-content;
+  height:40px;
+  padding: 4px 20px;
+  margin:10px;
+  border-radius: 12px;
+  border:1px solid var(--border);
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--green);
+  color: var(--green-light);
+  font-weight:300;
+}
+
+button:disabled {
+  background-color:#999999;
+
+}
+
+button.addMoreItem {
+    visibility: visible;
+}
+
+.isHidden {
+    /* display:none; */
+    visibility: hidden;
+}
+
+.toggleContainer {
+    display:flex;
+    align-items: left;
+    gap: 6px;
+    flex-direction: column;
+    /* background: var(--bg-surface); 
+    border-radius:10px;
+    border: 1px solid var(--border); */
+    padding:10px 0px;
+}
+
+.toggleLabel {
+    /* display:inline; */
+    color: var(--text-muted);
+    min-width:100px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.toggleGroup {
+    display:flex;
+    gap: 0px;
+    flex-wrap:wrap;
+}
+
+.toggleButton {
+    padding: 7px 20px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: 5%;
+    background: var(--bg-card);
+    color: #555555;
+    font-size:13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin:-1px;
+}
+
+.toggleButtonSelected{
+    border:none;
+    background: var(--green-mid);
+    color:var(--green-light);
+    font-weight:500;
+    border: 1.5px solid var(--border-mid);
+}
+
+/* item card */
+.itemCardContainer {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    gap:10px;
+    /* flex-flow: row; */
+    border: 1px solid var(--border-mid);
+    border-radius:20px;
+    padding:20px;
+    margin:20px;
+}
+
+.error {
+    font-size:12px;
+    color: var(--error);
+}
+
+.cartRow {
+    display:grid;
+    grid-template-columns:1fr 2fr 2fr 1fr;
+    gap:10px;
+    border: 1px solid var(--border-mid);
+    border-radius:20px;
+    padding:20px;
+    margin:20px;
+}
+
+.cartTotal {
+    display:flex;
+    justify-content: flex-end ;
+    padding-right:60px;
+}
+
+.itemList {
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:8px;
+    padding:16px;
+}
+
+.itemCard {
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    padding:10px; 
+    margin:10px;
+    border-radius:15px;
+    border:1px solid var(--border-mid);
+    background: var(--bg-surface);
+    transition: border-color 0.12s, background 0.12s;
+}
+
+.itemCardAdded {
+    border-color: var(--green-mid);
+    background: var(--bg-surface);
+}
+
+input.itemCheckbox {
+    margin:5px;
+}
+
+.imgCard {
+    background: #ffffff;
+    border-radius: 15px;
+    border:1px solid var(--border-mid);
+    width:300px;
+}
+
+.itemName {
+    font-size: 18px;
+    color: var(--orange);
+    font-weight:600;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.itemDesc {
+    font-size: 14px;
+    color: var(--text);
+}
+.itemPrice {
+    font-size: 13px;
+    color: var(--green);
+    font-weight:600;
+}
+
+/* .addToCardButton {
+    
+}
+
+.removeFromCartButton {
+
+} */
+
+.qtyContainer {}
+
+.qtyButton {
+    padding: 5px 15px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: 5%;
+    background: var(--bg-card);
+    color: #555555;
+    font-size:13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin:-1px;
+
+}
+
+.qtyText {
+    padding:20px;
+}
+
+@media (max-width:600px) {
+    .itemList {
+        grid-template-columns:1fr;
+    }
+}
+
+@media (max-width:900px) {
+    .itemList {
+        grid-template-columns:repeat(2, fr);
+    }
+}
+
+/* Profile */
+.profileForm {
+    display:flex;
+    flex-direction: column;
+    gap:16px;
+    padding-top: 30px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.fieldRow {
+    display:flex;
+    gap: 10px;
+    flex-direction:row;
+}
+
+.fieldRow .field { flex:1; /* each takes equal width */}
+
+.fieldInput {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border-mid);
+    border-radius: 2px;
+    background: var(--bg-card);
+    color: #555555;
+    font-size:13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin:-1px;
+    width:100%; outline: none;
+}
+
