@@ -328,6 +328,19 @@ input.itemCheckbox {
     }
 }
 
+/* admin */
+.order {
+    display:grid;
+    grid-template-columns:1fr 2fr 3fr 1fr;
+    gap: 16px;
+    border: 1px solid var(--border-mid);
+    border-radius:20px;
+    padding:20px;
+    margin:20px;
+    text-align: left;
+    font-size: 14px;
+}
+
 /* Profile */
 .profileForm {
     display:flex;

@@ -10,7 +10,7 @@ import { getItemsFor, AGE_GROUPS, GENDERS, STATUSES, PATROLS, RANKS,
     Filter items from ItemList
 */
 function Profile( {contact, setContact} ) {
-    console.log("contact state", contact);
+    //console.log("contact state", contact);
     const navigate = useNavigate();
 
     // helpler function to update any contact field
@@ -171,7 +171,7 @@ function ItemList({ageGroup, gender, status, cartItems, setCartItems}) {
 /* Step 3: Review order, adjust qty, place order
 Save to localStorage and opens mailto on submit
 */
-function Cart( {cartItems, setCartItems, contact}) {
+function Cart( {cartItems, setCartItems, contact, setContact}) {
     
     const navigate = useNavigate();
     const totalAmount = cartItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
@@ -211,30 +211,30 @@ function Cart( {cartItems, setCartItems, contact}) {
             + `x${item.qty}`
             + ` @ $${item.price}`
             + ` = ${item.price * item.qty}`
-        ).join("%0A"); // join by line feed
+        ).join("\n"); // join by line feed
 
         const emailBody = `
-        SCOUT UNIFORM 
-        *******************
-        Order ID: ${order.id}
-        Date:     ${order.date}
+SCOUT UNIFORM 
+*******************
+Order ID: ${order.id}
+Date:     ${order.date}
         
-        PROFILE 
-        -------------------------
-        Name:     ${contact.firstName} ${contact.lastName}
-        Email:    ${contact.email} 
-        Rank:     ${contact.rank}
-        Age:      ${contact.ageGroup}
-        Gender:   ${contact.gender}
-        Status:   ${contact.status}  
-        -------------------------
-        ORDER ITEMS
-        -------------------------
-        ${itemLines}
-        -------------------------
-        TOTAL:    ${totalAmount.toFixed(2)}
-        =========================
-        `.trim();
+PROFILE 
+-------------------------
+Name:     ${contact.firstName} ${contact.lastName}
+Email:    ${contact.email} 
+Rank:     ${contact.rank}
+Age:      ${contact.ageGroup}
+Gender:   ${contact.gender}
+Status:   ${contact.status}  
+-------------------------
+ORDER ITEMS
+-------------------------
+${itemLines}
+-------------------------
+TOTAL:    ${totalAmount.toFixed(2)}
+=========================
+`.trim();
 
         // open mail client
         window.location.href = `mailto:${COORDINATOR_EMAIL}`
@@ -242,8 +242,18 @@ function Cart( {cartItems, setCartItems, contact}) {
             + `&subject=${encodeURIComponent(`Uniform Order - ${contact.firstName} ${contact.lastName}`)}`
             + `&body=${encodeURIComponent(emailBody)}`;
 
-        // clear cart
+        // clear cart and contact before navigate out of the page
         setCartItems([]);
+        setContact({
+            firstName: "",
+            lastName: "",
+            email: "",
+            rank: "",
+            patrol:"",
+            ageGroup: "youth",
+            gender: "male",
+            status: "new"
+        })
         navigate("/");
         //alert(`Order Placed! OrderID: ${order.id}`)
     }
@@ -324,6 +334,70 @@ function Cart( {cartItems, setCartItems, contact}) {
     )
 }
 
+/* Admin screen for the uniform coordinator to review all orders 
+I run out of time to add admin login screen 
+*/
+function Admin() {
+    // retreive all orders from localStorage
+    const [orders, setOrders] = useState(() => {
+        const saved = localStorage.getItem("orders");
+        return saved ? JSON.parse(saved) : [];
+    }); 
+
+    /* Search for the order in localStoarge
+    Update the JSON object 
+    Update the orders useState */
+    function handleRemove(id) {
+        const updated = orders.filter((o) => o.id !== id);
+        localStorage.setItem("orders", JSON.stringify(updated));
+        setOrders(updated);
+    }
+
+    return (
+        <div>
+            <h1>Coordinator Admin</h1>
+            <div className="stepFooter">
+                <p>{orders.length} orders received.</p>
+            </div>
+
+            {
+                orders.length === 0 ? (
+                    <p>No orders yet</p>
+                ) : (
+                    orders.map((order)=> (
+                        <div key={order.id} className="order">
+                            <div>
+                                <strong>Order #{order.id} - {order.date}</strong>
+                            </div>
+                            <div>
+                                <p><strong>{order.contact.firstName} {order.contact.lastName}</strong> ({order.contact.status})</p>
+                                <p>{order.contact.rank} | {order.contact.patrol}</p>
+                                <p>{order.contact.ageGroup} | {order.contact.gender}</p>
+                                <p>{order.contact.email}</p>
+                            </div>
+                            <div>
+                                { order.items.map((item)=> (
+                                    <div key={item.id}>
+                                        <span>{item.name} {item.size}</span>
+                                        <span>x{item.qty}</span>
+                                        <span> = ${(item.price * item.qty).toFixed(2)}</span>
+                                    </div>
+                                ))}
+                                <strong>Total: ${order.total.toFixed(2)}</strong>
+                            </div>
+                            <div>
+                                <button onClick={() => handleRemove(order.id)}>Remove Order</button>
+                            </div>
+                        </div>
+                        
+                    ))
+                )
+            }
+        </div>
+    ); 
+}
+
+/* Parent Component */
 function MyApp() {
     const [contact, setContact] = useState({
         firstName: "",
@@ -355,6 +429,7 @@ function MyApp() {
                         <NavLink className={({isActive}) => isActive ? "navItemActive" : "navItem"} to="/cart">
                             Cart { cartCount > 0 ? (<span className="cartBadge">{cartCount}</span>) : "" }
                         </NavLink>
+                        <NavLink className={({isActive}) => isActive ? "navItemActive" : "navItem"} to="/admin">Admin</NavLink>
                     </nav>
                     <div className="profileSummary">
                         Welcome to Troop 701{contact.firstName ? `, ${contact.firstName}` : ""} 
@@ -370,8 +445,11 @@ function MyApp() {
                             cartItems={cartItems} setCartItems={setCartItems} />
                         } />
                     <Route path="/cart" element={
-                        <Cart cartItems={cartItems} setCartItems={setCartItems} contact={contact} />
+                        <Cart cartItems={cartItems} setCartItems={setCartItems} contact={contact} setContact={setContact}/>
                         } />
+                    <Route path="/admin" element={
+                        <Admin />
+                    } />
                 </Routes>
             </BrowserRouter>
         </>
