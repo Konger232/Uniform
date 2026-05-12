@@ -111,8 +111,10 @@ export const CATALOG = [
 ];
 
 // Helper function to retrieve items
+// filter categlog by age group, gender, status and the showAll flag
+// always includes the default items
 export function getItemsFor(ageGroup, gender, status, showAll) {
-    console.log("getItemsFor called with:", ageGroup, gender, status, showAll);
+    //console.log("getItemsFor called with:", ageGroup, gender, status, showAll);
 
     // filter the list by age and gender
     const filteredList = CATALOG.filter (

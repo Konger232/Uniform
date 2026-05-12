@@ -1,9 +1,6 @@
 /*  utils.jsx houses all the shared visual components */
 import { useState } from 'react'
 
-// add to cart regardless of age, gender and status (new/transfer)
-const DEFAULT_ITEMS = ["unit-numbers", "council-patch", "neckercheif"];
-
 export function ToggleControl({label, options, value, onChange, labels={} }) {
 
     // handle null sizeOptions for items like handbook 

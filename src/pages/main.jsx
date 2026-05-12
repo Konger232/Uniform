@@ -6,8 +6,9 @@ import { ToggleControl, ItemCard, ImageGallery, InputField} from './utils'
 import { getItemsFor, AGE_GROUPS, GENDERS, STATUSES, PATROLS, RANKS, 
     CATALOG, COORDINATOR_EMAIL  } from "./config"
 
-/* Step 1 : connect customer info */
-
+/* Step 1 : Collect customer info
+    Filter items from ItemList
+*/
 function Profile( {contact, setContact} ) {
     console.log("contact state", contact);
     const navigate = useNavigate();
@@ -79,10 +80,14 @@ function Profile( {contact, setContact} ) {
         </div>);
 }
 
-/* Step 2: display the item list based on the profile */
+/* Step 2: display the recommended item list based on the scout profile
+Transfer scouts see default items only unless ShowAll is false
+Returning scouts see everything in case they are trying to replace an missing item
+*/
 function ItemList({ageGroup, gender, status, cartItems, setCartItems}) {
     //console.log("ItemList rendering: ", ageGroup, gender, status);
-
+    const navigate = useNavigate();
+    
     // flag to show all items 
     const [showAll, setShowAll] = useState(false);
     // filtered based on the age, gender and status
@@ -94,7 +99,30 @@ function ItemList({ageGroup, gender, status, cartItems, setCartItems}) {
         setFilteredItems(items);
     }, [ageGroup, gender, status, showAll]);
 
-    //handleAddAll (i went out of to make it work)
+    // helper function add all recommended items to cart
+    function handleAddAll () {
+        filteredItems.forEach((item) => {
+            // Skip if already in cart
+            if (cartItems.find((i) => i.id === item.id))
+                return;     
+            // skip if needs a size 
+            if (item.sizeOptions && item.sizeOptions.length > 0)
+                return;
+
+            // update the cart
+            setCartItems((prev) => [
+                ...prev, {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    image: item.images?.[0] ?? "",
+                    size: "",
+                    qty: 1,
+                    price: item.price
+                }                
+            ]);
+        });
+    }
 
     return (
     <div className="survey-card">
@@ -102,7 +130,7 @@ function ItemList({ageGroup, gender, status, cartItems, setCartItems}) {
         <h1>Choose Uniform Items</h1>
 
         <h2>You have {filteredItems.length} recommended items</h2>
-        
+        <button onClick={handleAddAll}>Add all recommended</button>
         { filteredItems.length === 0 ? (
             <p>No items found. Please check your selections above.</p>
             ) : (
@@ -131,11 +159,18 @@ function ItemList({ageGroup, gender, status, cartItems, setCartItems}) {
         onClick={() => setShowAll(false)}>
              - Show recommended items only
         </button>
+        <div className="stepFooter">
+            <button className="btn" 
+                disabled={cartItems.length === 0}
+                onClick={() => navigate("/Cart")}>Next: Cart</button>
+        </div>
        
     </div>);
 }
 
-/* step 3: submit the cart */
+/* Step 3: Review order, adjust qty, place order
+Save to localStorage and opens mailto on submit
+*/
 function Cart( {cartItems, setCartItems, contact}) {
     
     const navigate = useNavigate();
@@ -176,7 +211,7 @@ function Cart( {cartItems, setCartItems, contact}) {
             + `x${item.qty}`
             + ` @ $${item.price}`
             + ` = ${item.price * item.qty}`
-        ).join("%OA"); // join by line feed
+        ).join("%0A"); // join by line feed
 
         const emailBody = `
         SCOUT UNIFORM 
@@ -204,7 +239,7 @@ function Cart( {cartItems, setCartItems, contact}) {
         // open mail client
         window.location.href = `mailto:${COORDINATOR_EMAIL}`
             + `?cc=${encodeURIComponent(contact.email)}`
-            + `&subject=${encodeURIComponent("Uniform Order - ${contact.firstName} ${contact.lastName}")}`
+            + `&subject=${encodeURIComponent(`Uniform Order - ${contact.firstName} ${contact.lastName}`)}`
             + `&body=${encodeURIComponent(emailBody)}`;
 
         // clear cart
