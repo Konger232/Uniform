@@ -344,6 +344,8 @@ function Admin() {
         return saved ? JSON.parse(saved) : [];
     }); 
 
+    const summary = getOrderSummary(orders);
+
     /* Search for the order in localStoarge
     Update the JSON object 
     Update the orders useState */
@@ -357,7 +359,19 @@ function Admin() {
         <div>
             <h1>Coordinator Admin</h1>
             <div className="stepFooter">
-                <p>{orders.length} orders received.</p>
+                <div className="orderSummary">
+                    <h2>Order Summary</h2>
+                    <p><i>{orders.length} orders received.</i></p>
+                {
+                    summary.map((row)=> (
+                        <div key={row.name + row.size} className="summaryRow">
+                            <span>{row.name}</span>
+                            {row.size && <span>({row.size})</span>}
+                            <strong> x{row.qty}</strong>
+                        </div>
+                    ))
+                }
+                </div>
             </div>
 
             {
@@ -377,13 +391,13 @@ function Admin() {
                             </div>
                             <div>
                                 { order.items.map((item)=> (
-                                    <div key={item.id}>
+                                    <div key={item.id} className="orderItemRow">
                                         <span>{item.name} {item.size}</span>
                                         <span>x{item.qty}</span>
-                                        <span> = ${(item.price * item.qty).toFixed(2)}</span>
+                                        <span className="price"> ${(item.price * item.qty).toFixed(2)}</span>
                                     </div>
                                 ))}
-                                <strong>Total: ${order.total.toFixed(2)}</strong>
+                                <div className="orderTotal">Total: ${order.total.toFixed(2)}</div>
                             </div>
                             <div>
                                 <button onClick={() => handleRemove(order.id)}>Remove Order</button>
@@ -395,6 +409,30 @@ function Admin() {
             }
         </div>
     ); 
+}
+
+/* Helper function to aggregate total number of orders per item + size.
+generate a key-value pair array */
+function getOrderSummary(orders) {
+    const summary = {};
+
+    orders.forEach((order) => {
+        order.items.forEach((item) => {
+            const key = item.id + (item.size ? `-$item.size` : "");
+            if (summary[key]) {
+                summary[key].qty += item.qty;
+            } else {
+                summary[key] = {
+                    name: item.name,
+                    size: item.size || "",
+                    qty: item.qty
+                };
+            }
+
+        })
+    })
+
+    return Object.values(summary);
 }
 
 /* Parent Component */

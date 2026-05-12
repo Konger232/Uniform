@@ -341,6 +341,31 @@ input.itemCheckbox {
     font-size: 14px;
 }
 
+.price {
+    text-align: right;
+}
+
+.orderTotal {
+    justify-self:end;
+    font-weight:700;
+}
+
+.orderSummary {
+    justify-self:left;
+    text-align: left;
+    font-size:12px;
+    border: 1px solid var(--border-mid);
+    border-radius:20px;
+    padding:20px;
+    margin:20px;
+}
+
+.orderItemRow {
+    display:grid;
+    grid-template-columns:3fr 1fr 1fr;
+    gap: 16px;
+}
+
 /* Profile */
 .profileForm {
     display:flex;
