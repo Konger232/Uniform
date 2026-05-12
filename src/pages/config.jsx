@@ -103,7 +103,7 @@ export const CATALOG = [
         "https://www.scoutshop.org/media/catalog/product/cache/2d930136879944f582dd3c1dba176abb/6/6/662954_far_east_council_emblem.jpg"
      ]},   
      
-     {id:"neckerchief", name:"Neckercheif", description: "Part of full class A uniform", price: 14.99,
+     {id:"neckerchief", name:"Neckerchief", description: "Part of full class A uniform", price: 14.99,
      sizeOptions: null, ageGroups: null, genders: null,
      images : [
         "https://www.scoutshop.org/media/catalog/product/cache/2d930136879944f582dd3c1dba176abb/c/u/customneckerchief_solid_1.jpg"
